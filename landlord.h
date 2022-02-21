@@ -11,26 +11,26 @@
 #include <string>
 #include <algorithm>
 #include <numeric>
-using namespace std;
+
 //////////////////////////global  methods///////////////////////
-void getaLine(string& inStr);   // get line of text
+void getaLine(std::string& inStr);   // get line of text
 char getaChar();                // get a character
 ///////////////////////////class tenant/////////////////////////
 class tenant
 {
 private:
-    string name;    // tenant’s name
+    std::string name;    // tenant’s name
     int aptNumber;  // tenant’s apartment number
     // other tenant information (phone, etc.) could go here
 public:
-    tenant(string n, int aNo);
+    tenant(std::string n, int aNo);
     ~tenant();
     int getAptNumber();
     // needed for use in ‘set’
     friend bool operator < (const tenant&, const tenant&);
     friend bool operator == (const tenant&, const tenant&);
     // for I/O
-    friend ostream& operator << (ostream&, const tenant&);
+    friend std::ostream& operator << (std::ostream&, const tenant&);
 };  // end class tenant
 ///////////////////////class compareTenants/////////////////////
 class compareTenants  //function object --  compares tenants
@@ -43,12 +43,12 @@ class tenantList
 {
 private:
     // set of pointers to tenants
-    set<tenant*, compareTenants> setPtrsTens;
-    set<tenant*, compareTenants>::iterator iter;
+    std::set<tenant*, compareTenants> setPtrsTens;
+    std::set<tenant*, compareTenants>::iterator iter;
 public:
     ~tenantList();               // destructor (deletes tenants)
     void insertTenant(tenant*);  // put tenant on list
-    int getAptNo(string);        // return apartment number
+    int getAptNo(std::string);        // return apartment number
     void display();              // display tenant list
 };  // end class tenantList
 /////////////////////class tenantInputScreen////////////////////
@@ -56,11 +56,12 @@ class tenantInputScreen
 {
 private:
     tenantList* ptrTenantList;
-    string tName;
+    std::string tName;
     int aptNo;
 public:
     tenantInputScreen(tenantList* ptrTL) : ptrTenantList(ptrTL)
-    { /* empty */ }
+    { /* empty */
+    }
     void getTenant();
 };  //end class tenantInputScreen
 //////////////////////////class rentRow/////////////////////////
@@ -78,11 +79,12 @@ public:
     friend bool operator < (const rentRow&, const rentRow&);
     friend bool operator == (const rentRow&, const rentRow&);
     // for output
-    friend ostream& operator << (ostream&, const rentRow&);
+    friend std::ostream& operator << (std::ostream&, const rentRow&);
 };  // end class rentRow
 ////////////////////////////////////////////////////////////////
 class compareRows  //function object --  compares rentRows
-{ public:
+{
+public:
     bool operator () (rentRow*, rentRow*) const;
 };
 /////////////////////////class rentRecord///////////////////////
@@ -90,8 +92,8 @@ class rentRecord
 {
 private:
     // set of pointers to rentRow objects (one per tenant)
-    set<rentRow*, compareRows> setPtrsRR;
-    set<rentRow*, compareRows>::iterator iter;
+    std::set<rentRow*, compareRows> setPtrsRR;
+    std::set<rentRow*, compareRows>::iterator iter;
 public:
     ~rentRecord();
     void insertRent(int, int, float);
@@ -104,14 +106,15 @@ class rentInputScreen
 private:
     tenantList* ptrTenantList;
     rentRecord* ptrRentRecord;
-    string renterName;
+    std::string renterName;
     float rentPaid;
     int month;
     int aptNo;
 public:
     rentInputScreen(tenantList* ptrTL, rentRecord* ptrRR) :
-    ptrTenantList(ptrTL), ptrRentRecord(ptrRR)
-    { /*empty*/ }
+        ptrTenantList(ptrTL), ptrRentRecord(ptrRR)
+    { /*empty*/
+    }
     void getRent();           //rent for one tenant and one month
 };  // end class rentInputScreen
 ////////////////////////////class expense///////////////////////
@@ -119,27 +122,30 @@ class expense
 {
 public:
     int month, day;
-    string category, payee;
+    std::string category, payee;
     float amount;
     expense()
     {}
-    expense(int m, int d, string c, string p, float a) :
-    month(m), day(d), category(c), payee(p), amount(a)
-    { /*empty */ }
+    expense(int m, int d, std::string c, std::string p, float a) :
+        month(m), day(d), category(c), payee(p), amount(a)
+    { /*empty */
+    }
     // needed for use in ‘set’
     friend bool operator < (const expense&, const expense&);
     friend bool operator == (const expense&, const expense&);
     // needed for output
-    friend ostream& operator << (ostream&, const expense&);
+    friend std::ostream& operator << (std::ostream&, const expense&);
 };  // end class expense
 ////////////////////////////////////////////////////////////////
 class compareDates  //function object--compares expenses
-{ public:
+{
+public:
     bool operator () (expense*, expense*) const;
 };
 ////////////////////////////////////////////////////////////////
 class compareCategories  //function object--compares expenses
-{ public:
+{
+public:
     bool operator () (expense*, expense*) const;
 };
 ////////////////////////class expenseRecord/////////////////////
@@ -147,8 +153,8 @@ class expenseRecord
 {
 private:
     // vector of pointers to expenses
-    vector<expense*> vectPtrsExpenses;
-    vector<expense*>::iterator iter;
+    std::vector<expense*> vectPtrsExpenses;
+    std::vector<expense*>::iterator iter;
 public:
     ~expenseRecord();
     void insertExp(expense*);
@@ -186,8 +192,8 @@ private:
     rentRecord* ptrRentRecord;
     rentInputScreen* ptrRentInputScreen;
     expenseRecord* ptrExpenseRecord;
-    expenseInputScreen*  ptrExpenseInputScreen;
-    annualReport*        ptrAnnualReport;
+    expenseInputScreen* ptrExpenseInputScreen;
+    annualReport* ptrAnnualReport;
     char ch;
 public:
     userInterface();
